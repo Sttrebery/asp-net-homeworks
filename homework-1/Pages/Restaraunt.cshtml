@@ -1,0 +1,37 @@
+﻿@page
+@model homework_1.Pages.RestarauntModel
+
+@{
+    Layout = "Layout";
+    ViewData["Title"] = $"Restaurant - {Model.SelectedRestaraunt.Name ?? "not selected"}";
+}
+
+<h1>Selected restaurant: </h1>
+<div style="font-size: 24px;">
+    <p>Restaurant Name - @Model.SelectedRestaraunt?.Name</p>
+    <p>Address - @Model.SelectedRestaraunt?.Address</p>
+    <p>Rating - @Model.SelectedRestaraunt?.Rating</p>
+</div>
+
+<h1>All restaurants:</h1>
+<ul style="font-size: 24px; background-color: antiquewhite; padding-top: 20px; padding-bottom: 20px;">
+    @for(int i = 1; i <= Model.Restaraunts.Count(); i++)
+    {
+        var rest = Model.Restaraunts[i - 1];
+        if (rest.Rating >= 4.0M)
+        {
+            <li>@i - @rest.Name @rest.Address
+                 <span style="color: greenyellow">@rest.Rating</span></li>
+        }
+        else if (rest.Rating > 2.5M)
+        {
+            <li>@i - @rest.Name @rest.Address
+                 <span style="color: yellow">@rest.Rating</span></li>
+        }
+        else
+        {
+            <li>@i - @rest.Name @rest.Address
+                <span style="color: red">@rest.Rating</span></li>
+        }
+    }
+</ul>
