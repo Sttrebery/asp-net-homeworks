@@ -1,5 +1,7 @@
 ﻿using System.Globalization;
+using System.Text.Encodings.Web;
 using System.Text.Json;
+using System.Text.Unicode;
 
 namespace homework_2.Shapes;
 
@@ -13,7 +15,8 @@ public class JsonShapeStorage : IShapeStorage
 {
     private static readonly JsonSerializerOptions Options = new()
     {
-        WriteIndented = true
+        WriteIndented = true,
+        Encoder = JavaScriptEncoder.Create(UnicodeRanges.BasicLatin, UnicodeRanges.Cyrillic)
     };
 
     public void Save(string filePath, GeometricShape[] shapes)
