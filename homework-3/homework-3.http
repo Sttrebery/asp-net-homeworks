@@ -1,6 +1,11 @@
-@homework_3_HostAddress = http://localhost:5172
+@urlBase = http://localhost:5172
 
-GET {{homework_3_HostAddress}}/weatherforecast/
-Accept: application/json
+GET {{urlBase}}/
+Accept: text/plain
+
+###
+
+GET {{urlBase}}/?key=some_key
+Accept: text/plain
 
 ###
