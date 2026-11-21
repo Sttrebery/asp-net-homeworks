@@ -1,15 +1,10 @@
+using homework_4.Middlewares;
+
 var builder = WebApplication.CreateBuilder(args);
-
-// Add services to the container.
-
-builder.Services.AddControllers();
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
-
-app.UseAuthorization();
-
-app.MapControllers();
+// Задание 1
+app.UseCustomBranches();
 
 app.Run();
