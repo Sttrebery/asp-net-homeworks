@@ -1,0 +1,20 @@
+[
+  {
+    "Id": 1,
+    "Login": "newLogin",
+    "Email": "testemail@mail.com",
+    "Password": "1234579"
+  },
+  {
+    "Id": 2,
+    "Login": "sttreb",
+    "Email": "sttrebery@mail.com",
+    "Password": "45757686"
+  },
+  {
+    "Id": 3,
+    "Login": "student",
+    "Email": "teste@l.c",
+    "Password": "1234579"
+  }
+]
