@@ -6,12 +6,13 @@ public static class ServiceIdentifiersRoute
 {
     public static void MapServiceIdentifiers(this IEndpointRouteBuilder endpoints)
     {
-        endpoints.Map("/lifetimes", (
+        endpoints.Map("/lifetimes", async (
                 HttpContext context,
                 IClockService clockService,
                 IUserService userService,
                 IValidatorService validatorService) =>
-            Results.Ok(new
+            
+            await context.Response.WriteAsJsonAsync(new
             {
                 FromMiddleware = context.Items["MiddlewareIds"],
                 FromEndpoint = new
@@ -23,12 +24,13 @@ public static class ServiceIdentifiersRoute
             })
         );
 
-        endpoints.Map("/scoped", (
-                HttpContext _,
+        endpoints.Map("/scoped",  async(
+                HttpContext context,
                 IClockService clockService,
                 IUserService userService,
                 IValidatorService validatorService) =>
-            Results.Ok(new
+            
+            await context.Response.WriteAsJsonAsync(new
             {
                 FromEndpoint = new
                 {
@@ -39,5 +41,26 @@ public static class ServiceIdentifiersRoute
             })
         );
         
+        
+        // 3 задание
+        endpoints.Map("/scoped-compare", async (
+            HttpContext context) =>
+        {
+            var fromRequestServices = context.RequestServices.GetRequiredService<IServiceId>();
+
+            Guid _isolatedScopeId;
+            using (var scope = context.RequestServices.CreateScope())
+            {
+                var isolatedService = scope.ServiceProvider.GetRequiredService<IServiceId>();
+                _isolatedScopeId = isolatedService.ServiceId;
+            }
+
+            await context.Response.WriteAsJsonAsync(new
+            {
+                requestServicesId = fromRequestServices.ServiceId,
+                isolatedScopeId = _isolatedScopeId,
+                areEqual = fromRequestServices.ServiceId == _isolatedScopeId
+            });
+        });
     }
 }
