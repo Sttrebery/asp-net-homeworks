@@ -1,11 +1,6 @@
-@homework_5_HostAddress = http://localhost:5037
+@urlBase = http://localhost:5037
 
-GET {{homework_5_HostAddress}}/openapi/v1.json
+### test for getting different config values
+### when ASPNETCORE_ENVIRONMENT is changed
+GET {{urlBase}}/api/settings
 Accept: application/json
-
-###
-
-GET {{homework_5_HostAddress}}/weatherforecast/
-Accept: application/json
-
-###
