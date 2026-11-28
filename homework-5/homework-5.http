@@ -9,3 +9,12 @@ Accept: application/json
 ### get config values with IOptions
 GET {{urlBase}}/api/application-info
 Accept: application/json
+
+
+### get config values from appsetting.yaml
+GET {{urlBase}}/api/yaml-settings
+Accept: application/json
+
+### get config values from appsetting.yaml with IOptions
+GET {{urlBase}}/api/yaml-application-info
+Accept: application/json

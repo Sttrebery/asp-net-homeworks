@@ -58,5 +58,58 @@ public static class MapConfigurationMiddleware
 
         // // IOptionsMonitor отслеживает изменения фоном, но там надо через OnChange обрабатывать
         
+        
+        // Задание 3 
+        //доступ через IConfiguration
+        app.MapGet("/api/yaml-settings", async (HttpContext context, IConfiguration config, IHostEnvironment env) =>
+        {
+            //обработка ошибков
+            try
+            {
+                var fullPath = Path.Combine(env.ContentRootPath, "appsettings.yaml");
+
+                if (!File.Exists(fullPath))
+                {
+                    await Results.NotFound("Файл конфигурации 'appsettings.yaml' не найден.").ExecuteAsync(context);
+                    
+                    return;
+                }
+                
+                var section = config.GetSection("Application");
+                var features = section.GetSection("Features");
+
+                await context.Response.WriteAsJsonAsync(
+                    new
+                    {
+                        // секция Applicatiom
+                        Name = config["Application:Name"],
+                        Version = config["Application:Version"],
+                        MaxItems = section.GetValue<int?>("MaxItems"),
+
+                        // секция Features
+                        IsHttpsEnabled = config.GetValue<bool?>("Application:Features:IsHttpsEnabled"),
+                        IsRazorPagesEnabled = section.GetValue<bool?>("Features:IsRazorPagesEnabled"),
+                        IsMappingEnabled = features.GetValue<bool?>("IsMappingEnabled"),
+                    });
+            }
+            catch (Exception e)
+            {
+                await Results.InternalServerError(e.Message).ExecuteAsync(context);
+            }
+            
+        });
+
+        // доступ через IOptions
+        app.MapGet("/api/yaml-application-info",(HttpContext context, IOptionsSnapshot<ApplicationOptions> appOptions, ApplicationInfoService appInfoService) =>
+        {
+            var appOptionsValue = appOptions.Value;
+            if (string.IsNullOrEmpty(appOptionsValue.Name.Trim()) || string.IsNullOrEmpty(appOptionsValue.Version.Trim()) ||
+                appOptionsValue.MaxItems <= 0)
+            {
+                return Results.InternalServerError("Incorrect app configuration");
+            }
+            
+            return Results.Ok(appInfoService.GetApplicationInfo());
+        });
     }
 }

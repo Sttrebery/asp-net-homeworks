@@ -5,6 +5,9 @@ using Microsoft.Extensions.Options;
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.Configuration.AddYamlFile("appsettings.yaml", optional: true);
+// builder.Configuration.AddYamlFile("appsettings.yaml");
+
 builder.Services.Configure<ApplicationOptions>(builder.Configuration.GetSection("Application"));
 builder.Services.AddScoped<ApplicationInfoService>();   //Внутри передается IOptionsSnapshot
 
