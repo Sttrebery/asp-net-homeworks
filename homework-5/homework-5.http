@@ -4,3 +4,8 @@
 ### when ASPNETCORE_ENVIRONMENT is changed
 GET {{urlBase}}/api/settings
 Accept: application/json
+
+
+### get config values with IOptions
+GET {{urlBase}}/api/application-info
+Accept: application/json

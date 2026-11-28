@@ -1,23 +1,15 @@
+using homework_5.Configurations;
+using homework_5.Routes;
+using homework_5.Services;
+using Microsoft.Extensions.Options;
+
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Services.Configure<ApplicationOptions>(builder.Configuration.GetSection("Application"));
+builder.Services.AddScoped<ApplicationInfoService>();   //Внутри передается IOptionsSnapshot
 
 var app = builder.Build();
 
-app.MapGet("/api/settings", async (HttpContext context, IConfiguration config) =>
-{
-    var section = config.GetSection("Application");
-    
-    await context.Response.WriteAsJsonAsync(
-        new
-        {
-            //по ключу
-            Name=config["Application:Name"], 
-            Version=config["Application:Version"],
-            LastUpdate=config["Application:LastUpdate"],
-            
-            //с помощью секции
-            ConnectionTimeout = section.GetValue<int>("ConnectionTimeout"),
-            IsAuthorizationRequired = section.GetValue<bool>("IsAuthorizationRequired"),
-        });
-});
+app.MapConfiguration();
 
 app.Run();
